@@ -1,6 +1,11 @@
 <?php
-    for($i = 0; $i < 1862;$i++){
-        echo "ansible ";
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+    } else if($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+    } else if($_SERVER['REQUEST_METHOD'] == 'PUT'){
+
+    } else if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+        
     }
-    if($_SERVER['REQUEST_METHOD']=='POST')
 ?>
