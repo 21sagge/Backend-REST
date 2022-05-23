@@ -11,13 +11,14 @@ $page = $_GET['page'];
 $size = $_GET['size'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
     $a = array();
-    $Selectall = "SELECT * FROM employees limit " . $page * $size . ',' . $size;
-    $Selectallr = mysqli_query($conn, $Selectall) or die("Query fallita " . mysqli_error($conn) . " " . mysqli_errno($conn));
+    $query = "SELECT * FROM employees limit " . $page * $size . ',' . $size;
+    $sql = mysqli_query($conn, $query);
 
     header('Content-Type: application/json;');
 
-    while ($row = mysqli_fetch_array($Selectallr, MYSQLI_NUM)) {
+    while ($row = mysqli_fetch_array($sql, MYSQLI_NUM)) {
         $array = array(
             "id" => $row['0'],
             "birthDate" => $row['1'],
@@ -34,9 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $links = array();
 
-    $count = "SELECT count(id) as count from employees";
-    $countr = mysqli_query($conn, $count) or die("Query fallita " . mysqli_error($conn) . " " . mysqli_errno($conn));
-    while ($row = mysqli_fetch_array($countr, MYSQLI_NUM)) {
+    $query = "SELECT count(id) as count from employees";
+    $sql = mysqli_query($conn, $query);
+    
+    while ($row = mysqli_fetch_array($sql, MYSQLI_NUM)) {
         $tot = $row[0];
     }
 
@@ -51,21 +53,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     array_push($pagine, $links);
     array_push($pagine, $pages);
     echo json_encode($pagine, JSON_UNESCAPED_SLASHES);
+
 } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $nome = $_GET['nome'];
     $cognome = $_GET['cognome'];
 
-    $insert = "INSERT INTO employees (first_name, last_name) VALUES ('$nome','$cognome')";
+    $query = "INSERT INTO employees (first_name, last_name) VALUES ('$nome','$cognome')";
+    $sql = mysqli_query($conn, $query);
 
-    $insertr = mysqli_query($conn, $insert) or die("Query fallita " . mysqli_error($conn) . " " . mysqli_errno($conn));
 } else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    echo json_encode($data);
+
+    $id = $_GET['id'];     
+
+    $query = " DELETE from employees where  id = '$id'";
+    $sql = mysqli_query ($conn, $query);
+
 } else if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+
     $id = $_GET['id'];
     $nome = $_GET['nome'];
     $cognome = $_GET['cognome'];
 
-    $update = "UPDATE employees SET first_name = '$nome' , last_name= '$cognome' WHERE id = '$id'"; //select 
+    $query = "UPDATE employees SET first_name = '$nome' , last_name= '$cognome' WHERE id = '$id'";
+    $sql = mysqli_query($conn, $query);
 
-    $updater = mysqli_query($conn, $update) or die("Query fallita " . mysqli_error($conn) . " " . mysqli_errno($conn));
 }
